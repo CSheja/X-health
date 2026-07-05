@@ -1,0 +1,194 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  PATIENT
+  CLINICIAN
+  CHW
+  PHARMACIST
+  ADMIN
+  DHO
+  SYSADMIN
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum AppointmentType {
+  IN_PERSON
+  TELEMEDICINE
+}
+
+enum ReferralStatus {
+  SENT
+  RECEIVED
+  ACCEPTED
+  REJECTED
+  COMPLETED
+}
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         Role
+  phone        String?
+  status       Status    @default(ACTIVE)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  clinician    Clinician?
+  patient      Patient?
+  chw          CHW?
+}
+
+model Clinician {
+  id            String      @id @default(uuid())
+  userId        String      @unique
+  user          User        @relation(fields: [userId], references: [id])
+  specialty     String?
+  licenseNo     String?
+  facilityId    String?
+  facility      Facility?   @relation(fields: [facilityId], references: [id])
+
+  appointments  Appointment[]
+  referralsSent Referral[]
+  visits        Visit[]
+}
+
+model Patient {
+  id          String    @id @default(uuid())
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id])
+  nationalId  String    @unique
+  dateOfBirth DateTime?
+  insuranceId String?
+  gender      String?
+
+  ehr          EHR?
+  appointments Appointment[]
+  referrals    Referral[]
+}
+
+model CHW {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  sectorId        String?
+  householdsCount Int      @default(0)
+
+  visitLogs  CHWVisitLog[]
+  cases      SurveillanceCase[]
+}
+
+model Facility {
+  id         String   @id @default(uuid())
+  name       String
+  tier       String
+  district   String
+  createdAt  DateTime @default(now())
+
+  clinicians   Clinician[]
+  appointments Appointment[]
+}
+
+model EHR {
+  id        String   @id @default(uuid())
+  patientId String   @unique
+  patient   Patient  @relation(fields: [patientId], references: [id])
+  allergies String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  visits Visit[]
+}
+
+model Visit {
+  id          String    @id @default(uuid())
+  ehrId       String
+  ehr         EHR       @relation(fields: [ehrId], references: [id])
+  clinicianId String
+  clinician   Clinician @relation(fields: [clinicianId], references: [id])
+  visitDate   DateTime  @default(now())
+  visitType   String
+  soapNotes   String?
+  icd10Code   String?
+
+  prescriptions Prescription[]
+}
+
+model Prescription {
+  id         String   @id @default(uuid())
+  visitId    String
+  visit      Visit    @relation(fields: [visitId], references: [id])
+  medication String
+  dose       String
+  frequency  String
+  duration   String
+  dispensed  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model Appointment {
+  id          String            @id @default(uuid())
+  patientId   String
+  patient     Patient           @relation(fields: [patientId], references: [id])
+  clinicianId String
+  clinician   Clinician         @relation(fields: [clinicianId], references: [id])
+  facilityId  String?
+  facility    Facility?         @relation(fields: [facilityId], references: [id])
+  scheduledAt DateTime
+  type        AppointmentType
+  status      AppointmentStatus @default(SCHEDULED)
+  createdAt   DateTime          @default(now())
+}
+
+model Referral {
+  id             String         @id @default(uuid())
+  patientId      String
+  patient        Patient        @relation(fields: [patientId], references: [id])
+  clinicianId    String
+  clinician      Clinician      @relation(fields: [clinicianId], references: [id])
+  fromFacilityId String?
+  toFacilityId   String?
+  status         ReferralStatus @default(SENT)
+  notes          String?
+  createdAt      DateTime       @default(now())
+}
+
+model CHWVisitLog {
+  id          String   @id @default(uuid())
+  chwId       String
+  chw         CHW      @relation(fields: [chwId], references: [id])
+  patientName String
+  visitType   String
+  notes       String?
+  synced      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model SurveillanceCase {
+  id            String   @id @default(uuid())
+  chwId         String
+  chw           CHW      @relation(fields: [chwId], references: [id])
+  conditionCode String
+  districtId    String?
+  status        String   @default("REPORTED")
+  reportedAt    DateTime @default(now())
+}
