@@ -16,4 +16,10 @@ app.get('/', (req, res) => {
 const authRoutes = require('./routes/auth.routes');
 app.use('/api/v1/auth', authRoutes);
 
+const patientRoutes = require('./routes/patient.routes');
+app.use('/api/v1/patients', patientRoutes);
+
+const adminRoutes = require('./routes/admin.routes');
+app.use('/api/v1/admin', adminRoutes);
+
 module.exports = app;
