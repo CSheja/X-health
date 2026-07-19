@@ -2,8 +2,9 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
-// Pages
 import Login from './pages/Login';
+import PatientLogin from './pages/PatientLogin';
+import PatientPortal from './pages/PatientPortal';
 import Dashboard from './pages/Dashboard';
 import Patients from './pages/Patients';
 import Appointments from './pages/Appointments';
@@ -13,33 +14,23 @@ import Surveillance from './pages/Surveillance';
 import CHW from './pages/CHW';
 import SuperAdmin from './pages/SuperAdmin';
 
-// Role-based portal landing
 const RoleRouter = () => {
   const { user } = useAuth();
   if (!user) return <Navigate to="/login" />;
-
   switch (user.role) {
     case 'SYSADMIN':
-    case 'ADMIN':
-      return <Navigate to="/dashboard" />;
-    case 'CLINICIAN':
-      return <Navigate to="/clinician" />;
-    case 'PHARMACIST':
-      return <Navigate to="/pharmacy" />;
-    case 'CHW':
-      return <Navigate to="/chw" />;
-    case 'DHO':
-      return <Navigate to="/surveillance" />;
-    case 'PATIENT':
-      return <Navigate to="/patient-portal" />;
-    default:
-      return <Navigate to="/dashboard" />;
+    case 'ADMIN': return <Navigate to="/dashboard" />;
+    case 'CLINICIAN': return <Navigate to="/dashboard" />;
+    case 'PHARMACIST': return <Navigate to="/pharmacy" />;
+    case 'CHW': return <Navigate to="/chw" />;
+    case 'DHO': return <Navigate to="/surveillance" />;
+    case 'PATIENT': return <Navigate to="/patient-portal" />;
+    default: return <Navigate to="/dashboard" />;
   }
 };
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center"
@@ -51,33 +42,38 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
       </div>
     );
   }
-
   if (!user) return <Navigate to="/login" />;
-
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/" />;
-  }
-
+  if (allowedRoles && !allowedRoles.includes(user.role)) return <Navigate to="/" />;
   return children;
 };
 
 const AppRoutes = () => {
   const { user } = useAuth();
-
   return (
     <Routes>
+      {/* Public routes */}
       <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-      <Route path="/" element={<ProtectedRoute><RoleRouter /></ProtectedRoute>} />
-      <Route path="/admin/users" element={
-  <ProtectedRoute allowedRoles={['SYSADMIN', 'ADMIN']}>
-  <SuperAdmin />
-</ProtectedRoute>
-} />
+      <Route path="/patient" element={<PatientLogin />} />
 
-      {/* Admin + Sysadmin routes */}
+      {/* Role router */}
+      <Route path="/" element={<ProtectedRoute><RoleRouter /></ProtectedRoute>} />
+
+      {/* Patient portal */}
+      <Route path="/patient-portal" element={
+        <ProtectedRoute allowedRoles={['PATIENT']}>
+          <PatientPortal />
+        </ProtectedRoute>
+      } />
+
+      {/* Staff routes */}
       <Route path="/dashboard" element={
-        <ProtectedRoute allowedRoles={['SYSADMIN', 'ADMIN']}>
+        <ProtectedRoute allowedRoles={['SYSADMIN', 'ADMIN', 'CLINICIAN']}>
           <Dashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/users" element={
+        <ProtectedRoute allowedRoles={['SYSADMIN', 'ADMIN']}>
+          <SuperAdmin />
         </ProtectedRoute>
       } />
       <Route path="/patients" element={
@@ -108,20 +104,6 @@ const AppRoutes = () => {
       <Route path="/chw" element={
         <ProtectedRoute allowedRoles={['SYSADMIN', 'ADMIN', 'CHW']}>
           <CHW />
-        </ProtectedRoute>
-      } />
-
-      {/* Clinician portal */}
-      <Route path="/clinician" element={
-        <ProtectedRoute allowedRoles={['CLINICIAN']}>
-          <Dashboard />
-        </ProtectedRoute>
-      } />
-
-      {/* Patient portal */}
-      <Route path="/patient-portal" element={
-        <ProtectedRoute allowedRoles={['PATIENT']}>
-          <Dashboard />
         </ProtectedRoute>
       } />
 
