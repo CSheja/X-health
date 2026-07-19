@@ -52,4 +52,19 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { getAllUsers, updateUserStatus, deleteUser };
+const getClinicianByUserId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const clinician = await prisma.clinician.findUnique({
+      where: { userId: id },
+    });
+    if (!clinician) {
+      return res.status(404).json({ success: false, error: 'Clinician profile not found' });
+    }
+    res.json({ success: true, data: clinician });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+module.exports = { getAllUsers, updateUserStatus, deleteUser, getClinicianByUserId };

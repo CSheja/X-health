@@ -25,10 +25,18 @@ const register = async (req, res) => {
     const passwordHash = await bcrypt.hash(password, 12);
 
     const user = await prisma.user.create({
-      data: { name, email, passwordHash, role }
-    });
+  data: { name, email, passwordHash, role }
+});
 
-    const token = generateToken(user.id);
+// Auto-create role profiles
+if (role === 'CLINICIAN') {
+  await prisma.clinician.create({ data: { userId: user.id } });
+}
+if (role === 'CHW') {
+  await prisma.cHW.create({ data: { userId: user.id } });
+}
+
+const token = generateToken(user.id);
 
     res.status(201).json({
       success: true,
