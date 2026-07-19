@@ -25,6 +25,15 @@ app.use('/api/v1/appointments', appointmentRoutes);
 const adminRoutes = require('./routes/admin.routes');
 app.use('/api/v1/admin', adminRoutes);
 
+const pharmacyRoutes = require('./routes/pharmacy.routes');
+app.use('/api/v1/pharmacy', pharmacyRoutes);
+
+const chwRoutes = require('./routes/chw.routes');
+app.use('/api/v1/chw', chwRoutes);
+
+const surveillanceRoutes = require('./routes/surveillance.routes');
+app.use('/api/v1/surveillance', surveillanceRoutes);
+
 // Temporary seed route — remove after use
 app.post('/api/v1/seed/clinician', async (req, res) => {
   const { PrismaClient } = require('@prisma/client');
