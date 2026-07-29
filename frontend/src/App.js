@@ -13,13 +13,15 @@ import Pharmacy from './pages/Pharmacy';
 import Surveillance from './pages/Surveillance';
 import CHW from './pages/CHW';
 import SuperAdmin from './pages/SuperAdmin';
+import FacilityAdmin from './pages/FacilityAdmin';
+import ClinicianPortal from './pages/ClinicianPortal';
 
 const RoleRouter = () => {
   const { user } = useAuth();
   if (!user) return <Navigate to="/login" />;
   switch (user.role) {
-    case 'SYSADMIN':
-    case 'ADMIN': return <Navigate to="/dashboard" />;
+    case 'SYSADMIN': return <Navigate to="/dashboard" />;
+    case 'ADMIN': return <Navigate to="/facility-admin" />;
     case 'CLINICIAN': return <Navigate to="/dashboard" />;
     case 'PHARMACIST': return <Navigate to="/pharmacy" />;
     case 'CHW': return <Navigate to="/chw" />;
@@ -28,7 +30,6 @@ const RoleRouter = () => {
     default: return <Navigate to="/dashboard" />;
   }
 };
-
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
   if (loading) {
@@ -71,13 +72,23 @@ const AppRoutes = () => {
           <Dashboard />
         </ProtectedRoute>
       } />
+      <Route path="/facility-admin" element={
+        <ProtectedRoute allowedRoles={['ADMIN']}>
+          <FacilityAdmin />
+        </ProtectedRoute>
+      } />
+      <Route path="/clinician-portal" element={
+        <ProtectedRoute allowedRoles={['CLINICIAN']}>
+          <ClinicianPortal />
+        </ProtectedRoute>
+      } />
       <Route path="/admin/users" element={
         <ProtectedRoute allowedRoles={['SYSADMIN', 'ADMIN']}>
           <SuperAdmin />
         </ProtectedRoute>
       } />
       <Route path="/patients" element={
-        <ProtectedRoute allowedRoles={['SYSADMIN', 'ADMIN', 'CLINICIAN']}>
+        <ProtectedRoute allowedRoles={['SYSADMIN', 'ADMIN']}>
           <Patients />
         </ProtectedRoute>
       } />

@@ -37,6 +37,9 @@ app.use('/api/v1/surveillance', surveillanceRoutes);
 const telemedicineRoutes = require('./routes/telemedicine.routes');
 app.use('/api/v1/telemedicine', telemedicineRoutes);
 
+const clinicianRoutes = require('./routes/clinician.routes');
+app.use('/api/v1/clinician', clinicianRoutes);
+
 // Temporary seed route — remove after use
 app.post('/api/v1/seed/clinician', async (req, res) => {
   const { PrismaClient } = require('@prisma/client');

@@ -3,6 +3,7 @@ const router = express.Router();
 const protect = require('../middleware/auth.middleware');
 const {
   getAllUsers,
+  getFacilityStats,
   updateUserStatus,
   deleteUser,
   getClinicianByUserId,
@@ -11,6 +12,7 @@ const {
 router.use(protect);
 
 router.get('/users', getAllUsers);
+router.get('/facility-stats', getFacilityStats);
 router.get('/users/:id/clinician', getClinicianByUserId);
 router.put('/users/:id/status', updateUserStatus);
 router.delete('/users/:id', deleteUser);

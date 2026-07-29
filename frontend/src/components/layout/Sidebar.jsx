@@ -5,9 +5,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import XHealthLogo from '../ui/XHealthLogo';
 
 const navItems = [
-  { label: 'Dashboard', path: '/dashboard', icon: '⬡', roles: ['SYSADMIN', 'ADMIN'] },
+  { label: 'Dashboard', path: '/dashboard', icon: '⬡', roles: ['SYSADMIN', 'ADMIN', 'CLINICIAN'] },
+  { label: 'Facility Overview', path: '/facility-admin', icon: '⬡', roles: ['ADMIN'] },
+  { label: 'Clinician Portal', path: '/clinician-portal', icon: '⬡', roles: ['CLINICIAN'] },
   { label: 'User Management', path: '/admin/users', icon: '◈', roles: ['SYSADMIN', 'ADMIN'] },
-  { label: 'Patients', path: '/patients', icon: '◎', roles: ['SYSADMIN', 'ADMIN', 'CLINICIAN'] },
+  { label: 'Patients', path: '/patients', icon: '◎', roles: ['SYSADMIN', 'ADMIN'] },
   { label: 'Appointments', path: '/appointments', icon: '◷', roles: ['SYSADMIN', 'ADMIN', 'CLINICIAN'] },
   { label: 'Telemedicine', path: '/telemedicine', icon: '◈', roles: ['SYSADMIN', 'ADMIN', 'CLINICIAN'] },
   { label: 'Pharmacy', path: '/pharmacy', icon: '◉', roles: ['SYSADMIN', 'ADMIN', 'PHARMACIST'] },
@@ -33,8 +35,7 @@ const Sidebar = () => {
       className="fixed left-0 top-0 h-full w-64 text-white flex flex-col z-50"
 style={{
   background: 'rgba(10,10,10,0.82)',
-  backdropFilter: 'blur(28px)',
-  WebkitBackdropFilter: 'blur(28px)',
+  backdropFilter: 'blur(28px)',  WebkitBackdropFilter: 'blur(28px)',
   borderRight: '1px solid rgba(255,255,255,0.06)',
 }}
     >
@@ -100,8 +101,7 @@ style={{
       {/* Logout */}
       <div className="p-4 border-t border-gray-800">
         <motion.button
-          whileHover={{ x: 4 }}
-          onClick={handleLogout}
+          whileHover={{ x: 4 }}          onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200"
         >
           <span>→</span>

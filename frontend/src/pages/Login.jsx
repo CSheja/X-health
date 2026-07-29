@@ -97,7 +97,7 @@ const Login = () => {
     setLoading(true);
     try {
       await login(email, password);
-      navigate('/dashboard');
+      navigate('/');
     } catch (err) {
       setError(err.response?.data?.error || 'Invalid credentials.');
     } finally {
@@ -108,8 +108,7 @@ const Login = () => {
   return (
     <div
       className="min-h-screen w-full overflow-hidden relative flex"
-style={{ background: 'linear-gradient(135deg, #dddddb 0%, #d5d5d3 50%, #d0d0ce 100%)' }}    >
-      <BackgroundCurves />
+style={{ background: 'linear-gradient(135deg, #dddddb 0%, #d5d5d3 50%, #d0d0ce 100%)' }}    >      <BackgroundCurves />
 
       {/* Left — Swarm centrepiece */}
       <div className="flex-1 relative flex flex-col">
@@ -183,14 +182,12 @@ style={{ background: 'linear-gradient(135deg, #dddddb 0%, #d5d5d3 50%, #d0d0ce 1
               />
               <FloatingInput
                 label="Password"
-                type="password"
-                value={password}
+                type="password"                value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 delay={0.8}
               />
 
-              <AnimatePresence>
-                {error && (
+              <AnimatePresence>                {error && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
@@ -198,8 +195,7 @@ style={{ background: 'linear-gradient(135deg, #dddddb 0%, #d5d5d3 50%, #d0d0ce 1
                     className="bg-red-50 border border-red-100 text-red-500 text-xs px-4 py-3 rounded-xl"
                   >
                     {error}
-                  </motion.div>
-                )}
+                  </motion.div>                )}
               </AnimatePresence>
 
               <motion.div
@@ -209,8 +205,7 @@ style={{ background: 'linear-gradient(135deg, #dddddb 0%, #d5d5d3 50%, #d0d0ce 1
                 className="pt-2"
               >
                 <motion.button
-                  type="submit"
-                  disabled={loading}
+                  type="submit"                  disabled={loading}
                   whileHover={{ scale: 1.02, boxShadow: '0 12px 40px rgba(17,17,17,0.25)' }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full py-4 bg-dark text-white rounded-2xl font-semibold text-sm tracking-widest uppercase relative overflow-hidden"

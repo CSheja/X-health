@@ -159,7 +159,7 @@ const getPatient = async (req, res) => {
 const updatePatient = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, phone, insuranceId, gender, dateOfBirth } = req.body;
+    const { name, phone, insuranceId, gender, dateOfBirth, nationalId } = req.body;
 
     const patient = await prisma.patient.findUnique({
       where: { id },
@@ -168,6 +168,13 @@ const updatePatient = async (req, res) => {
 
     if (!patient) {
       return res.status(404).json({ success: false, error: 'Patient not found' });
+    }
+
+    if (nationalId && nationalId !== patient.nationalId) {
+      const existing = await prisma.patient.findUnique({ where: { nationalId } });
+      if (existing) {
+        return res.status(400).json({ success: false, error: 'A patient with this National ID already exists' });
+      }
     }
 
     await prisma.user.update({
@@ -181,6 +188,7 @@ const updatePatient = async (req, res) => {
     const updated = await prisma.patient.update({
       where: { id },
       data: {
+        nationalId: nationalId || patient.nationalId,
         insuranceId: insuranceId || patient.insuranceId,
         gender: gender || patient.gender,
         dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : patient.dateOfBirth,

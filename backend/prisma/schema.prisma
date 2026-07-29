@@ -51,6 +51,8 @@ model User {
   role         Role
   phone        String?
   status       Status    @default(ACTIVE)
+  facilityId   String?
+  facility     Facility? @relation(fields: [facilityId], references: [id])
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
@@ -107,6 +109,22 @@ model Facility {
 
   clinicians   Clinician[]
   appointments Appointment[]
+  admins       User[]
+  stock        Stock[]
+}
+
+model Stock {
+  id           String   @id @default(uuid())
+  facilityId   String
+  facility     Facility @relation(fields: [facilityId], references: [id])
+  medication   String
+  quantity     Int      @default(0)
+  unit         String?
+  reorderLevel Int      @default(10)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([facilityId, medication])
 }
 
 model EHR {

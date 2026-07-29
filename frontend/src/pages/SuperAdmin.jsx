@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Layout from '../components/layout/Layout';
 import API from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const ROLES = [
   { value: 'SYSADMIN', label: 'Super Admin', color: 'bg-purple-100 text-purple-700' },
@@ -25,6 +26,7 @@ const getRoleLabel = (role) => {
 
 // Create User Modal
 const CreateUserModal = ({ onClose, onSuccess }) => {
+  const { user: currentUser } = useAuth();
   const [form, setForm] = useState({
     name: '', email: '', password: '', role: 'CLINICIAN', phone: ''
   });
@@ -38,7 +40,10 @@ const CreateUserModal = ({ onClose, onSuccess }) => {
     setError('');
     setLoading(true);
     try {
-      await API.post('/auth/register', form);
+      await API.post('/auth/register', {
+        ...form,
+        facilityId: currentUser?.facilityId || null,
+      });
       onSuccess();
       onClose();
     } catch (err) {
