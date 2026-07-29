@@ -37,26 +37,17 @@ const PatientLogin = () => {
     setError('');
     setLoading(true);
     try {
-      // Register user account
       await authService.register({
         name: form.name,
         email: form.email,
         password: form.password,
         role: 'PATIENT',
         phone: form.phone,
-      });
-      // Create patient profile
-      await login(form.email, form.password);
-      // Then create patient record
-      const API = (await import('../services/api')).default;
-      await API.post('/patients', {
-        name: form.name,
-        email: form.email,
         nationalId: form.nationalId,
         dateOfBirth: form.dateOfBirth,
         gender: form.gender,
-        phone: form.phone,
       });
+      await login(form.email, form.password);
       navigate('/patient-portal');
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed');

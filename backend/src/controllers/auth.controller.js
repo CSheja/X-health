@@ -11,7 +11,7 @@ const generateToken = (id) => {
 
 const register = async (req, res) => {
   try {
-    const { name, email, password, role, facilityId } = req.body;
+    const { name, email, password, role, facilityId, nationalId, dateOfBirth, gender } = req.body;
 
     if (!name || !email || !password || !role) {
       return res.status(400).json({ success: false, error: 'Please fill in all fields' });
@@ -39,7 +39,9 @@ const register = async (req, res) => {
       const patient = await prisma.patient.create({
         data: {
           userId: user.id,
-          nationalId: `PENDING-${user.id.slice(0, 8)}`,
+          nationalId: nationalId || `PENDING-${user.id.slice(0, 8)}`,
+          dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
+          gender: gender || null,
         }
       });
       await prisma.eHR.create({
