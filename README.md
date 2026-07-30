@@ -1,6 +1,6 @@
 # X-Health Rwanda
 
-This is my capstone project for ALU — a healthcare platform that tries to connect the different pieces of Rwanda's health system (patients, doctors, CHWs, pharmacists, hospital admins, district health officers) that currently don't talk to each other at all.
+This is my capstone project for ALU  a healthcare platform that tries to connect the different pieces of Rwanda's health system (patients, doctors, CHWs, pharmacists, hospital admins, district health officers) that currently don't talk to each other at all.
 
 Full context and requirements are in the SRS doc linked at the bottom of this file.
 
@@ -23,6 +23,7 @@ Test accounts for each role:
 - Pharmacist — pharmacist@xhealth.rw / Pharma1234!
 - CHW — chw@xhealth.rw / Chw1234!
 - District Health Officer — dho@xhealth.rw / Dho1234!
+- Demo Patient — demopatient3@xhealth.rw / Demo1234!
 
 There's also a demo patient already registered and a demo visit/prescription/dispensing chain set up so you can see the whole flow (clinician logs a visit + prescribes → pharmacist sees it and dispenses → stock goes down automatically).
 
