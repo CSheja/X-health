@@ -32,14 +32,21 @@ Full detail on this (with sources, stakeholder analysis, etc.) is in the SRS.
 ## Demo accounts (live site)
 
 Staff login: https://xhealth-frontend.onrender.com/login
+
 Patient login: https://xhealth-frontend.onrender.com/patient
 
 Facility Admin — admin@xhealth.rw — Admin1234!
+
 Clinician (Dr Uwase) — doctor@xhealth.rw — Doctor1234!
+
 Pharmacist — pharmacist@xhealth.rw — Pharma1234!
+
 CHW — chw@xhealth.rw — Chw1234!
+
 District Health Officer — dho@xhealth.rw — Dho1234!
+
 Demo Patient — demopatient3@xhealth.rw — Demo1234!
+
 
 The demo patient already has a logged visit with two prescriptions attached one already dispensed (so you can see stock actually went down), one still pending. There's also a CHW visit log and a reported case already in the system so the DHO's Surveillance page isn't empty.
 
@@ -49,16 +56,12 @@ Fairly standard split: React frontend talks to an Express API over REST, API tal
 
 Browser (React SPA)
 |
-
 | HTTPS / axios / JWT in Authorization header
 v
-
 Express API (/api/v1/...)
 |
-
 | Prisma ORM
 v
-
 PostgreSQL
 
 
