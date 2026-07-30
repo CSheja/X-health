@@ -55,13 +55,19 @@ The demo patient already has a logged visit with two prescriptions attached one 
 Fairly standard split: React frontend talks to an Express API over REST, API talks to Postgres through Prisma. Nothing server-side rendered  the frontend is a pure SPA.
 
 Browser (React SPA)
+
 |
+
 | HTTPS / axios / JWT in Authorization header
 v
+
 Express API (/api/v1/...)
+
 |
+
 | Prisma ORM
 v
+
 PostgreSQL
 
 
