@@ -55,20 +55,19 @@ The demo patient already has a logged visit with two prescriptions attached one 
 Fairly standard split: React frontend talks to an Express API over REST, API talks to Postgres through Prisma. Nothing server-side rendered  the frontend is a pure SPA.
 
 Browser (React SPA)
+|
+
+|  HTTPS / axios / JWT in Authorization header
+v
+
+   Express API (/api/v1/...)
 
 |
 
-| HTTPS / axios / JWT in Authorization header
+|  Prisma ORM
 v
 
-Express API (/api/v1/...)
-
-|
-
-| Prisma ORM
-v
-
-PostgreSQL
+ PostgreSQL
 
 
 Auth is JWT-based login returns a token, stored in localStorage, sent as a Bearer token on every request after that. Tokens expire after 30 minutes, so if you're testing and it's been a while, you'll need to log back in (this tripped me up more than once while building).
