@@ -135,11 +135,15 @@ Full schema is in `backend/prisma/schema.prisma`.
 ## Project structure
 
 X-health/
+
 ├── backend/
 
 │ ├── prisma/
+
 │ │ ├── schema.prisma # data model
+
 │ │ └── migrations/
+
 │ ├── src/
 │ │ ├── controllers/ # one per feature area (auth, patient, clinician, pharmacy, chw, surveillance, admin, appointment, telemedicine)
 │ │ ├── routes/
