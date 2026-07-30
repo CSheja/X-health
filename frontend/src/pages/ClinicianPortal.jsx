@@ -264,6 +264,7 @@ const ClinicianPortal = () => {
   const { user } = useAuth();
   const [appointments, setAppointments] = useState([]);
   const [patients, setPatients] = useState([]);
+  const [allPatients, setAllPatients] = useState([]);
   const [facilities, setFacilities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showTodayOnly, setShowTodayOnly] = useState(true);
@@ -273,13 +274,15 @@ const ClinicianPortal = () => {
   const fetchAll = async () => {
     setLoading(true);
     try {
-      const [apptsRes, patientsRes, facilitiesRes] = await Promise.all([
+      const [apptsRes, patientsRes, allPatientsRes, facilitiesRes] = await Promise.all([
         API.get(`/clinician/appointments${showTodayOnly ? '?today=true' : ''}`),
         API.get('/clinician/patients'),
+        API.get('/patients?limit=1000'),
         API.get('/clinician/facilities'),
       ]);
       setAppointments(apptsRes.data.data);
       setPatients(patientsRes.data.data);
+      setAllPatients(allPatientsRes.data.data);
       setFacilities(facilitiesRes.data.data);
     } catch (err) {
       console.error(err);
@@ -405,11 +408,11 @@ const ClinicianPortal = () => {
 
       <AnimatePresence>
         {showLogVisit && (
-          <LogVisitModal patients={patients} appointments={appointments}
+          <LogVisitModal patients={allPatients} appointments={appointments}
             onClose={() => setShowLogVisit(false)} onSuccess={fetchAll} />
         )}
         {showReferral && (
-          <ReferralModal patients={patients} facilities={facilities}
+          <ReferralModal patients={allPatients} facilities={facilities}
             onClose={() => setShowReferral(false)} onSuccess={fetchAll} />
         )}
       </AnimatePresence>
