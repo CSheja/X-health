@@ -6,12 +6,12 @@ Full context and requirements are in the SRS doc linked at the bottom of this fi
 
 **Live site:** https://xhealth-frontend.onrender.com
 
-The backend is on Render's free tier, so it sleeps after inactivity. First request after idle time takes 30-60 seconds to wake up — not a bug, just the platform. Everything's fast after that first request.
+The backend is on Render's free tier, so it sleeps after inactivity. First request after idle time takes 30-60 seconds to wake up  not a bug, just the platform. Everything's fast after that first request.
 
 
 ## The problem this is trying to solve
 
-Rwanda's health system is fragmented across facility tiers — a patient seen at a health center for something has no record that follows them if they're referred to a district hospital. CHWs at the community level are still mostly on paper. There's no single platform that a patient, a doctor, a CHW, a pharmacist, and a district health officer can all use for their piece of the same care pathway. That's what this project tries to build a version of, scoped down to what's realistic for a pilot.
+Rwanda's health system is fragmented across facility tiers  a patient seen at a health center for something has no record that follows them if they're referred to a district hospital. CHWs at the community level are still mostly on paper. There's no single platform that a patient, a doctor, a CHW, a pharmacist, and a district health officer can all use for their piece of the same care pathway. That's what this project tries to build a version of, scoped down to what's realistic for a pilot.
 
 Full detail on this (with sources, stakeholder analysis, etc.) is in the SRS.
 
@@ -21,7 +21,7 @@ Full detail on this (with sources, stakeholder analysis, etc.) is in the SRS.
 
 **Clinician** — sees their own patients (built from actual visit history, not everyone in the system), logs in-person visits with SOAP notes and ICD-10 codes, prescribes medication, sends referrals to other facilities, runs telemedicine consultations with a live WebRTC video call and issues prescriptions during the session.
 
-**Pharmacist** — sees prescriptions scoped to their own facility, dispenses them, manages stock (can restock — which adds to current quantity — or set an exact count for inventory corrections). Dispensing a prescription automatically decrements stock for that medication if it's being tracked.
+**Pharmacist** — sees prescriptions scoped to their own facility, dispenses them, manages stock (can restock  which adds to current quantity or set an exact count for inventory corrections). Dispensing a prescription automatically decrements stock for that medication if it's being tracked.
 
 **CHW** — logs home visits, reports disease cases that feed into the district surveillance dashboard.
 
@@ -32,74 +32,20 @@ Full detail on this (with sources, stakeholder analysis, etc.) is in the SRS.
 ## Demo accounts (live site)
 
 Staff login: https://xhealth-frontend.onrender.com/login
-Patient login/register: https://xhealth-frontend.onrender.com/patient
+Patient login: https://xhealth-frontend.onrender.com/patient
 
+Facility Admin — admin@xhealth.rw — Admin1234!
+Clinician (Dr Uwase) — doctor@xhealth.rw — Doctor1234!
+Pharmacist — pharmacist@xhealth.rw — Pharma1234!
+CHW — chw@xhealth.rw — Chw1234!
+District Health Officer — dho@xhealth.rw — Dho1234!
+Demo Patient — demopatient3@xhealth.rw — Demo1234!
 
-|
- Role
- 
-|
- Email
- 
-|
- Password 
- 
-|
-|
----
-|
----
-|
----
-|
-|
- Facility Admin 
-|
- admin@xhealth.rw 
-|
- Admin1234! 
-|
-|
- Clinician (Dr Uwase) 
-|
- doctor@xhealth.rw 
-|
- Doctor1234! 
-|
-|
- Pharmacist 
-|
- pharmacist@xhealth.rw 
-|
- Pharma1234! 
-|
-|
- CHW 
-|
- chw@xhealth.rw 
-|
- Chw1234! 
-|
-|
- District Health Officer 
-|
- dho@xhealth.rw 
-|
- Dho1234! 
-|
-|
- Demo Patient 
-|
- demopatient3@xhealth.rw 
-|
- Demo1234! 
-|
-
-The demo patient already has a logged visit with two prescriptions attached — one already dispensed (so you can see stock actually went down), one still pending. There's also a CHW visit log and a reported case already in the system so the DHO's Surveillance page isn't empty.
+The demo patient already has a logged visit with two prescriptions attached one already dispensed (so you can see stock actually went down), one still pending. There's also a CHW visit log and a reported case already in the system so the DHO's Surveillance page isn't empty.
 
 ## Architecture
 
-Fairly standard split: React frontend talks to an Express API over REST, API talks to Postgres through Prisma. Nothing server-side rendered — the frontend is a pure SPA.
+Fairly standard split: React frontend talks to an Express API over REST, API talks to Postgres through Prisma. Nothing server-side rendered  the frontend is a pure SPA.
 
 Browser (React SPA)
 |
@@ -116,9 +62,9 @@ v
 PostgreSQL
 
 
-Auth is JWT-based — login returns a token, stored in localStorage, sent as a Bearer token on every request after that. Tokens expire after 30 minutes, so if you're testing and it's been a while, you'll need to log back in (this tripped me up more than once while building).
+Auth is JWT-based login returns a token, stored in localStorage, sent as a Bearer token on every request after that. Tokens expire after 30 minutes, so if you're testing and it's been a while, you'll need to log back in (this tripped me up more than once while building).
 
-Role-based access is enforced both client-side (routes redirect based on role) and server-side (each protected route checks `req.user.role`) — client-side alone isn't real security since anyone can read the JS, so the actual enforcement lives in the API.
+Role-based access is enforced both client-side (routes redirect based on role) and server-side (each protected route checks `req.user.role`)  client-side alone isn't real security since anyone can read the JS, so the actual enforcement lives in the API.
 
 ## Database design notes
 
@@ -137,7 +83,7 @@ Full schema is in `backend/prisma/schema.prisma`.
 - **Database:** PostgreSQL via Prisma ORM
 - **Auth:** JWT + bcrypt
 - **Video:** Browser-native WebRTC for telemedicine (no external service)
-- **Hosting:** Render — backend as a web service, frontend as a static site, Postgres as a managed database, three separate services talking to each other
+- **Hosting:** Render backend as a web service, frontend as a static site, Postgres as a managed database, three separate services talking to each other
 
 ## Project structure
 
@@ -224,7 +170,7 @@ Run it:
 npm run dev
 ```
 
-Check http://localhost:5000 — should return `{"message": "X-Health Rwanda API is running"}`.
+Check http://localhost:5000  should return `{"message": "X-Health Rwanda API is running"}`.
 
 ### Frontend
 
@@ -241,7 +187,7 @@ Opens at http://localhost:3000.
 
 DB starts empty. Register a patient directly through the app at http://localhost:3000/patient. For a staff/admin account, either:
 - Run `npx prisma studio` from `backend/` (opens a DB browser at localhost:5555) and insert a `User` row manually with `role: ADMIN`, or
-- Write a quick one-off script similar to the ones in `backend/scripts/` — that's how I bootstrapped my own admin accounts both locally and in production.
+- Write a quick one-off script similar to the ones in `backend/scripts/`  that's how I bootstrapped my own admin accounts both locally and in production.
 
 ## API overview
 
@@ -296,11 +242,11 @@ Being upfront about what's not built, since a lot of it is scoped MED/LOW priori
 
 ## A few things that were harder than expected
 
-Worth noting for anyone reading this as a fellow student, not just for grading — a couple of bugs took a while to track down and are the kind of thing I'd watch for building something similar:
+Worth noting for anyone reading this as a fellow student, not just for grading  a couple of bugs took a while to track down and are the kind of thing I'd watch for building something similar:
 
-- Facility-scoped data has to be scoped through the right relation. `User.facilityId` and `Clinician.facilityId` are separate fields, and a few features (like which prescriptions a pharmacist can see) depend on the *Clinician's* one specifically — easy to update one and forget the other exists.
+- Facility scoped data has to be scoped through the right relation. `User.facilityId` and `Clinician.facilityId` are separate fields, and a few features (like which prescriptions a pharmacist can see) depend on the *Clinician's* one specifically — easy to update one and forget the other exists.
 - Registration flows that create more than one linked record (User → Patient → EHR) need to happen in one place. I initially had the frontend calling two separate endpoints to register a patient, which caused a race condition/duplicate-creation bug once the backend was also updated to auto-create the Patient record on its own.
-- Render's static hosting doesn't read a `_redirects` file the way Netlify does — redirect/rewrite rules have to be set in Render's own dashboard instead.
+- Render's static hosting doesn't read a `_redirects` file the way Netlify does  redirect/rewrite rules have to be set in Render's own dashboard instead.
 
 ## SRS
 
