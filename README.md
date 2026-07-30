@@ -36,11 +36,14 @@ Patient login/register: https://xhealth-frontend.onrender.com/patient
 
 
 |
- Role 
+ Role
+ 
 |
- Email 
+ Email
+ 
 |
  Password 
+ 
 |
 |
 ---
@@ -100,12 +103,16 @@ Fairly standard split: React frontend talks to an Express API over REST, API tal
 
 Browser (React SPA)
 |
+
 | HTTPS / axios / JWT in Authorization header
 v
+
 Express API (/api/v1/...)
 |
+
 | Prisma ORM
 v
+
 PostgreSQL
 
 
@@ -145,21 +152,37 @@ X-health/
 │ │ └── migrations/
 
 │ ├── src/
+
 │ │ ├── controllers/ # one per feature area (auth, patient, clinician, pharmacy, chw, surveillance, admin, appointment, telemedicine)
+
 │ │ ├── routes/
+
 │ │ ├── middleware/
+
 │ │ │ └── auth.middleware.js # JWT verification, attaches req.user
+
 │ │ └── app.js # route mounting
+
 │ └── scripts/ # one-off data fix/seed scripts used during development
+
 ├── frontend/
+
 │ └── src/
+
 │ ├── pages/ # one page per role/portal
+
 │ ├── components/
+
 │ │ ├── layout/ # Sidebar, Navbar, Layout wrapper
+
 │ │ └── ui/
+
 │ ├── context/
+
 │ │ └── AuthContext.js # holds logged-in user, login/logout
+
 │ └── services/
+
 │ └── api.js # axios instance, attaches auth token
 
 
